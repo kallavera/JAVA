@@ -5,8 +5,10 @@ attribute vec2 texture_coords;
 
 varying vec2 tex_coords;
 
+uniform mat4 projection;
+
 void main()
 {
 	tex_coords = texture_coords;
-	gl_Position = vec4(vertex_position, 1);
+	gl_Position = projection * vec4(vertex_position, 1);
 }

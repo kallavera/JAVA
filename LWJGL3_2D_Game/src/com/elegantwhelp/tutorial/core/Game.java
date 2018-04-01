@@ -3,9 +3,12 @@ package com.elegantwhelp.tutorial.core;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import com.elegantwhelp.tutorial.core.camera.Camera;
 import com.elegantwhelp.tutorial.core.graphics.Texture;
 import com.elegantwhelp.tutorial.core.inputs.Input;
 import com.elegantwhelp.tutorial.core.models.Model;
@@ -13,8 +16,8 @@ import com.elegantwhelp.tutorial.core.shaders.Shader;
 
 public class Game
 {
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
+	public static final int WIDTH = 640;
+	public static final int HEIGHT = 480;
 	public static final String TITLE = "LWJGL3 ElegantWhelp Tutorial";
 	
 	private long window = 0;
@@ -25,6 +28,7 @@ public class Game
 	private Texture myTexture;
 	private Model model;
 	private Shader shader;
+	private Camera camera;
 	
 	private float[] vertices =
 	{
@@ -47,6 +51,12 @@ public class Game
 		0, 1, 2,
 		2, 3, 0
 	};
+	
+	Matrix4f scale = new Matrix4f()
+			.translate(x, y, 0)
+			.scale(300);
+	
+	Matrix4f target = new Matrix4f();
 	
 	public Game()
 	{
@@ -107,23 +117,44 @@ public class Game
 		myTexture = new Texture("./res/img_01.jpg");
 		
 		model = new Model(vertices, tex, indices);
+		
+		scale = new Matrix4f().scale(300);
+		
+		camera = new Camera(WIDTH, HEIGHT);
 	}
 	
 	private void gameLoop()
 	{
+		double frame_cap = 1.0/60.0;
+		
+		double time = Timer.getTime();
+		
+		double delta = 0;
+		
 		while(!glfwWindowShouldClose(window))
 		{
-			glfwPollEvents();
+			double now = Timer.getTime();
 			
-			glClear(GL_COLOR_BUFFER_BIT);
+			delta += now - time;
 			
-			update();
+			time = now;
 			
-			glEnable(GL_TEXTURE_2D);
+			while(delta >= frame_cap)
+			{
+				glfwPollEvents();
+				
+				glClear(GL_COLOR_BUFFER_BIT);
+				
+				update();
+				
+				glEnable(GL_TEXTURE_2D);
 
-			render();
-			
-			glfwSwapBuffers(window);
+				render();
+				
+				glfwSwapBuffers(window);
+				
+				delta -= frame_cap;
+			}
 		}
 	}
 	
@@ -131,20 +162,25 @@ public class Game
 	{
 		input.update();
 		
-		if(input.isUp()) {y += 0.0001f;}
-		if(input.isDown()) {y -= 0.0001f;}
-		if(input.isRight()) {x += 0.0001f;}
-		if(input.isLeft()) {x -= 0.0001f;}
+		if(input.isUp()) {y += 1f;}
+		if(input.isDown()) {y -= 1f;}
+		if(input.isRight()) {x += 1f;}
+		if(input.isLeft()) {x -= 1f;}
 		
 		if(input.isFire()) {System.out.println("PUM!!!");}
 		
 		if(input.isClose()) {glfwSetWindowShouldClose(window, true);}
+		
+		target = scale;
+		
+		camera.setPosition(new Vector3f(x, y, 0));
 	}
 	
 	private void render()
 	{
 		shader.bind();
-		shader.setIntUniform("sampler", 0);
+		shader.setUniform("sampler", 0);
+		shader.setUniform("projection", camera.getProjection().mul(target));
 		
 		myTexture.bind(0);
 		
