@@ -8,7 +8,8 @@ import java.io.FileReader;
 
 public class Shader
 {
-	private static final int ATT_VERTEX_POSITIONS = 0;
+	public static final int ATT_VERTEX_POSITIONS = 0;
+	public static final int ATT_TEXTURE_COORDS = 1;
 	
 	private int program;
 	private int vs;
@@ -42,6 +43,7 @@ public class Shader
 		glAttachShader(program, fs);
 		
 		glBindAttribLocation(program, ATT_VERTEX_POSITIONS, "vertex_position");
+		glBindAttribLocation(program, ATT_TEXTURE_COORDS, "texture_coords");
 		
 		glLinkProgram(program);
 		if((glGetProgrami(program, GL_LINK_STATUS)) != 1)
@@ -85,5 +87,25 @@ public class Shader
 		}
 		
 		return str.toString();
+	}
+	
+	public void setIntUniform(String name, int value)
+	{
+		int location = glGetUniformLocation(program, name);
+		
+		if(location != -1)
+		{
+			glUniform1i(location, value);
+		}
+	}
+	
+	public void setFloatUniform(String name, float value)
+	{
+		int location = glGetUniformLocation(program, name);
+		
+		if(location != -1)
+		{
+			glUniform1f(location, value);
+		}
 	}
 }

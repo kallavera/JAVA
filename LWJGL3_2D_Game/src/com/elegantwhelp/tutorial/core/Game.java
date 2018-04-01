@@ -19,6 +19,7 @@ public class Game
 	
 	private long window = 0;
 	private float x, y;
+	private float green = 0;
 	
 	private Input input;
 	private Texture myTexture;
@@ -103,7 +104,7 @@ public class Game
 		
 		shader = new Shader("shader");
 		
-//		myTexture = new Texture("./res/img_01.jpg");
+		myTexture = new Texture("./res/img_01.jpg");
 		
 		model = new Model(vertices, tex, indices);
 	}
@@ -118,7 +119,6 @@ public class Game
 			
 			update();
 			
-//			myTexture.bind();
 			glEnable(GL_TEXTURE_2D);
 
 			render();
@@ -144,6 +144,10 @@ public class Game
 	private void render()
 	{
 		shader.bind();
+		shader.setIntUniform("sampler", 0);
+		
+		myTexture.bind(0);
+		
 		model.render();
 	}
 }
