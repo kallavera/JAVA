@@ -7,7 +7,7 @@ public class Input
 {
 	public static final int LEFT_CLICK = 0;
 	long window;
-	private boolean up, down, left, right, close, fire;
+	private boolean up, down, left, right, close, fire, fullScreen;
 	
 	public Input(long window)
 	{
@@ -22,6 +22,7 @@ public class Input
 		right = false;
 		close = false;
 		fire = false;
+		fullScreen = false;
 	}
 	
 	public void update()
@@ -37,6 +38,9 @@ public class Input
 		
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GL_TRUE)
 		{close = true;}else{close = false;}
+		
+		if(glfwGetKey(window, GLFW_KEY_SPACE) == GL_TRUE)
+		{ fullScreen = true; } else { fullScreen = false; }
 		
 		if(glfwGetMouseButton(window, LEFT_CLICK) == GL_TRUE)
 		{fire = true;}else{fire = false;}
@@ -70,5 +74,10 @@ public class Input
 	public boolean isFire()
 	{
 		return fire;
+	}
+	
+	public boolean isFullScreen()
+	{
+		return fullScreen;
 	}
 }

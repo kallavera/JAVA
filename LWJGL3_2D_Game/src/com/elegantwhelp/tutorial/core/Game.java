@@ -16,19 +16,18 @@ import com.elegantwhelp.tutorial.core.shaders.Shader;
 
 public class Game
 {
-	public static final int WIDTH = 640;
-	public static final int HEIGHT = 480;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
 	public static final String TITLE = "LWJGL3 ElegantWhelp Tutorial";
 	
-	private long window = 0;
 	private float x, y;
-	private float green = 0;
 	
 	private Input input;
 	private Texture myTexture;
 	private Model model;
 	private Shader shader;
 	private Camera camera;
+	private Window window;
 	
 	private float[] vertices =
 	{
@@ -73,26 +72,16 @@ public class Game
 	
 	private void init()
 	{
+		window = new Window();
+		
 		System.out.println("ElegantWhelp LWJGL3 Tutorial");
+		
 		if(!glfwInit())
 		{
 			throw new IllegalStateException("[ERROR]: Fallo al iniciar GLFW");
 		}
 		
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-		window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, 0, 0);
-//		window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, glfwGetPrimaryMonitor(), 0);	// FullScreen
-		
-		if(window == 0)
-		{
-			throw new IllegalStateException("[ERROR]: Fallo al crear la ventana");
-		}
-		
-		GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, (videoMode.width() - WIDTH) / 2, (videoMode.height() - HEIGHT) / 2);
-		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-		
-		glfwShowWindow(window);
+		window.createWindow();
 		
 		x = 0;
 		y = 0;
@@ -100,16 +89,15 @@ public class Game
 	
 	private void prepare()
 	{
-		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		
 //		glClearColor(0.06f, 0.13f, 0.447f, 1.0f);
-		glClearColor(0.0f, 0.f, 0.0f, 1.0f);
+		glClearColor(0.0f, 0.f, 0.4f, 1.0f);
 	}
 	
 	private void setObjects()
 	{
-		input = new Input(window);
+		input = new Input(window.getWindow());
 		input.init();
 		
 		shader = new Shader("shader");
@@ -120,7 +108,7 @@ public class Game
 		
 		scale = new Matrix4f().scale(300);
 		
-		camera = new Camera(WIDTH, HEIGHT);
+		camera = new Camera(window.getWidth(), window.getHeight());
 	}
 	
 	private void gameLoop()
@@ -131,7 +119,7 @@ public class Game
 		
 		double delta = 0;
 		
-		while(!glfwWindowShouldClose(window))
+		while(!window.shouldClose())
 		{
 			double now = Timer.getTime();
 			
@@ -151,7 +139,7 @@ public class Game
 
 				render();
 				
-				glfwSwapBuffers(window);
+				window.swap();
 				
 				delta -= frame_cap;
 			}
@@ -162,18 +150,36 @@ public class Game
 	{
 		input.update();
 		
-		if(input.isUp()) {y += 1f;}
-		if(input.isDown()) {y -= 1f;}
-		if(input.isRight()) {x += 1f;}
-		if(input.isLeft()) {x -= 1f;}
+		if(input.isUp()) { y += 3f; }
+		if(input.isDown()) { y -= 3f; }
+		if(input.isRight()) { x +=3f; }
+		if(input.isLeft()) { x -= 3f; }
 		
-		if(input.isFire()) {System.out.println("PUM!!!");}
+		if(input.isFullScreen() && !  window.getFullScreen()) { makeFullScreen(); }
 		
-		if(input.isClose()) {glfwSetWindowShouldClose(window, true);}
+		else if(input.isFullScreen() && window.getFullScreen()) { makeWindowed(); }
+		
+		if(input.isFire()) { System.out.println("PUM!!!"); }
+		
+		if(input.isClose()) { glfwSetWindowShouldClose(window.getWindow(), true); }
 		
 		target = scale;
 		
 		camera.setPosition(new Vector3f(x, y, 0));
+	}
+	
+	private void makeFullScreen()
+	{
+		window.goFullScreen();
+		prepare();
+		setObjects();
+	}
+	
+	private void makeWindowed()
+	{
+		window.goWindowed();
+		prepare();
+		setObjects();
 	}
 	
 	private void render()
