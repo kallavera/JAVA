@@ -6,11 +6,11 @@ import com.thinmatrix.tutorial.core.DisplayManager;
 import com.thinmatrix.tutorial.core.Geometry;
 import com.thinmatrix.tutorial.core.Loader;
 import com.thinmatrix.tutorial.core.Renderer;
+import com.thinmatrix.tutorial.shaders.StaticShader;
 
 public class GameMainLoop
 {
-	//	https://www.youtube.com/watch?v=z2yFlvkBbmk&index=3&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP
-	//	video 3 (renderiza un solo triangulo)
+	//	https://www.youtube.com/watch?v=SPt-aogu72A
 
 	public GameMainLoop()
 	{
@@ -23,6 +23,7 @@ public class GameMainLoop
 		
 		Loader loader = new Loader();
 		Renderer renderer = new Renderer();
+		StaticShader shader = new StaticShader();
 		
 		float[] positions = 
 		{
@@ -45,11 +46,13 @@ public class GameMainLoop
 			renderer.prepare();
 			// Tick
 			// Render
+			shader.start();
 			renderer.render(geo);
-			
+			shader.stop();
 			DisplayManager.updateDisplay();
 		}
 		
+		shader.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 	}
