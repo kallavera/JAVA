@@ -26,17 +26,17 @@ public class GameMainLoop
 		
 		float[] positions = 
 		{
-			-0.5f,  0.5f, 0,	// 0
-			-0.5f, -0.5f, 0,	// 1
-			 0.5f, -0.5f, 0,	// 2
-			-0.5f,  0.5f, 0		// 3
+			-0.5f,  0.5f, 0f,	// 0
+			-0.5f, -0.5f, 0f,	// 1
+			 0.5f, -0.5f, 0f,	// 2
+			 0.5f,  0.5f, 0f	// 3
 		};
 		
 		int[] indices = 
-			{
-				0, 1, 3,
-				3, 1, 2
-			};
+		{
+			0, 1, 3,
+			3, 1, 2
+		};
 		
 		Geometry geo = loader.loadToVao(positions, indices);
 		
