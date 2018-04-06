@@ -8,12 +8,18 @@ import static org.lwjgl.opengl.GL30.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public abstract class ShaderProgram
 {
 	private int programID;
 	private int vertexShaderID;
 	private int fragmentShaderID;
+	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
 	public ShaderProgram(String vertexFile, String fragmentFile)
 	{
@@ -23,10 +29,45 @@ public abstract class ShaderProgram
 		programID = glCreateProgram();
 		glAttachShader(programID, vertexShaderID);
 		glAttachShader(programID, fragmentShaderID);
+		bindAttributes();
 		glLinkProgram(programID);
 		glValidateProgram(programID);
+		geAlltUniformLocation();
+	}
+	
+	protected abstract void geAlltUniformLocation();
+	
+	protected int getUniformLocation(String uniformName)
+	{
+		return glGetUniformLocation(programID, uniformName);
+	}
+	
+	protected void loadInUniform(int location, float value)
+	{
+		glUniform1f(location, value);
+	}
+	
+	protected void loadInUniform(int location, int value)
+	{
+		glUniform1i(location, value);
+	}
+	
+	protected void loadInUniform(int location, Vector3f vector)
+	{
+		glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+	
+	protected void loadInUniform(int location, boolean value)
+	{
+		glUniform1f(location, value? 1 : 0);
+	}
+	
+	protected void loadInUniform(int location, Matrix4f matrix)
+	{
 		
-		bindAttributes();
+		matrix.store(matrixBuffer);
+		matrixBuffer.flip();
+		glUniformMatrix4(location, false, matrixBuffer);
 	}
 	
 	public void start()

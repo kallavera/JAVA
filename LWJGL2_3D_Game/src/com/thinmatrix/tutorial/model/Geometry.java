@@ -1,4 +1,4 @@
-package com.thinmatrix.tutorial.core;
+package com.thinmatrix.tutorial.model;
 
 public class Geometry
 {
