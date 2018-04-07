@@ -12,6 +12,7 @@ import com.thinmatrix.tutorial.entities.Entity;
 import com.thinmatrix.tutorial.model.Geometry;
 import com.thinmatrix.tutorial.model.Mesh;
 import com.thinmatrix.tutorial.shaders.StaticShader;
+import com.thinmatrix.tutorial.textures.Material;
 import com.thinmatrix.tutorial.toolbox.Maths;
 
 public class Renderer
@@ -24,6 +25,8 @@ public class Renderer
 
 	public Renderer(StaticShader shader)
 	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		createProjectionMatrix();
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
@@ -33,7 +36,8 @@ public class Renderer
 	public void prepare()
 	{
 		glEnable(GL_DEPTH_TEST);
-		glClearColor(0,  0,  0, 1);
+//		glClearColor(0,  0,  0, 1);
+		glClearColor(0.3f,  0,  0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	
@@ -45,9 +49,12 @@ public class Renderer
 		glBindVertexArray(geo.getVaoID());
 		glEnableVertexAttribArray(StaticShader.ATT_VERTEX_POSITION);
 		glEnableVertexAttribArray(StaticShader.ATT_TEXCOORDS_POSITION);
+		glEnableVertexAttribArray(StaticShader.ATT_NORMALS_POSITION);
 		
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		shader.loadTranformationMatric(transformationMatrix);
+		Material material = mesh.getMaterial();
+		shader.loadShineVariables(material.getShineDumper(), material.getReflectivity());
 		
 		glActiveTexture(mesh.getMaterial().getID());
 		glBindTexture(GL_TEXTURE_2D, mesh.getMaterial().getID());
@@ -55,6 +62,7 @@ public class Renderer
 		
 		glDisableVertexAttribArray(StaticShader.ATT_VERTEX_POSITION);
 		glDisableVertexAttribArray(StaticShader.ATT_TEXCOORDS_POSITION);
+		glDisableVertexAttribArray(StaticShader.ATT_NORMALS_POSITION);
 		glBindVertexArray(0);
 	}
 	

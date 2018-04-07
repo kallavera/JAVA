@@ -26,12 +26,13 @@ public class Loader
 	private List<Integer> vbos = new ArrayList<Integer>();
 	private List<Integer> textures = new ArrayList<Integer>();
 	
-	public Geometry loadToVao(float[] positions, float[] texCoords, int[] indices)
+	public Geometry loadToVao(float[] positions, float[] texCoords, float[] normals, int[] indices)
 	{
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
 		storeDataInAttributeList(StaticShader.ATT_VERTEX_POSITION, 3, positions);
 		storeDataInAttributeList(StaticShader.ATT_TEXCOORDS_POSITION, 2, texCoords);
+		storeDataInAttributeList(StaticShader.ATT_NORMALS_POSITION, 3, normals);
 		unbindVAO();
 		return new Geometry(vaoID, indices.length);
 	}

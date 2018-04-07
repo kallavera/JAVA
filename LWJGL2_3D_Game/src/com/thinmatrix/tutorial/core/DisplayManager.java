@@ -31,6 +31,7 @@ public class DisplayManager
 		{
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
+			Display.setVSyncEnabled(true);
 			Display.setTitle(TITLE);
 		}
 		catch (LWJGLException e)
