@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
+import shaders.ShaderProgram;
+
 public class Renderer
 {
 
@@ -22,11 +24,11 @@ public class Renderer
 	public void render(RawModel model)
 	{
 		glBindVertexArray(model.getVaoID());
-		glEnableVertexAttribArray(Loader.ATT_POSITIONS);
+		glEnableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		
 		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
 		
-		glDisableVertexAttribArray(Loader.ATT_POSITIONS);
+		glDisableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		glBindVertexArray(0);
 	}
 }

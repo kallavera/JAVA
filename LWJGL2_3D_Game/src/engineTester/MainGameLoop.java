@@ -6,9 +6,11 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.RawModel;
 import renderEngine.Renderer;
+import shaders.StaticShader;
 
 public class MainGameLoop
 {
+	//https://www.youtube.com/watch?v=4w7lNF8dnYw
 
 	public MainGameLoop()
 	{
@@ -36,14 +38,18 @@ public class MainGameLoop
 		Loader loader = new Loader();
 		RawModel model = loader.loadToVAO(positions, indices);
 		Renderer renderer = new Renderer();
+		StaticShader shader = new StaticShader();
 		
 		while(!Display.isCloseRequested())
 		{
-			DisplayManager.updateDisplay();
 			renderer.prepare();
+			shader.start();
 			renderer.render(model);
+			shader.stop();
+			DisplayManager.updateDisplay();
 		}
 		
+		shader.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 	}
