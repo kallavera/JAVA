@@ -15,8 +15,8 @@ public class Renderer
 	
 	public void prepare()
 	{
-		glClearColor(0.7f, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.7f, 0, 0, 1);
 	}
 	
 	public void render(RawModel model)
@@ -24,7 +24,7 @@ public class Renderer
 		glBindVertexArray(model.getVaoID());
 		glEnableVertexAttribArray(Loader.ATT_POSITIONS);
 		
-		glDrawArrays(GL_TRIANGLES, 0, model.getVertexCount());
+		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
 		
 		glDisableVertexAttribArray(Loader.ATT_POSITIONS);
 		glBindVertexArray(0);
