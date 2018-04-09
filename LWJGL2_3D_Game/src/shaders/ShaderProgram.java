@@ -12,6 +12,7 @@ import java.io.IOException;
 public abstract class ShaderProgram
 {
 	public static final int ATT_POSITIONS = 0;
+	public static final int ATT_TEX_COORDS = 1;
 	
 	private int programID;
 	private int vertexShaderID;

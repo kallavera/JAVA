@@ -5,30 +5,33 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
 
 import org.lwjgl.BufferUtils;
+import org.newdawn.slick.opengl.*;
 
+import models.RawModel;
 import shaders.ShaderProgram;
 
 public class Loader
 {
 	private List<Integer> vaos = new ArrayList<Integer>();
 	private List<Integer> vbos = new ArrayList<Integer>();
+	private List<Integer> textures = new ArrayList<Integer>();
 
 	public Loader()
 	{
 		
 	}
 	
-	public RawModel loadToVAO(float[] positions, int[] indices)
+	public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices)
 	{
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
 		storeDataInAttributeList(ShaderProgram.ATT_POSITIONS, 3, positions);
+		storeDataInAttributeList(ShaderProgram.ATT_TEX_COORDS, 2, textureCoords);
 		unbindVAO();
 		
 		return new RawModel(vaoID, indices.length);
@@ -83,6 +86,28 @@ public class Loader
 		return buffer;
 	}
 	
+	public int loadTexture(String fileName)
+	{
+		Texture texture = null;
+		try
+		{
+			texture = TextureLoader.getTexture("PNG", new FileInputStream("res/IMAGES/" + fileName + ".png"));
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		int textureID = texture.getTextureID();
+		textures.add(textureID);
+		
+		return textureID;
+	}
+	
 	public void cleanUp()
 	{
 		for(int vao:vaos)
@@ -93,6 +118,11 @@ public class Loader
 		for(int vbo:vbos)
 		{
 			glDeleteBuffers(vbo);
+		}
+		
+		for(int texture:textures)
+		{
+			glDeleteTextures(texture);
 		}
 	}
 }

@@ -2,11 +2,13 @@ package engineTester;
 
 import org.lwjgl.opengl.Display;
 
+import models.RawModel;
+import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
-import renderEngine.RawModel;
 import renderEngine.Renderer;
 import shaders.StaticShader;
+import textures.ModelTexture;
 
 public class MainGameLoop
 {
@@ -19,6 +21,12 @@ public class MainGameLoop
 
 	public static void main(String[] args)
 	{
+		DisplayManager.createDisplay();
+		
+		Loader loader = new Loader();
+		Renderer renderer = new Renderer();
+		StaticShader shader = new StaticShader();
+		
 		float[] positions =
 		{
 			-0.5f,  0.5f, 0,	//v0 TOP LEFT
@@ -33,18 +41,23 @@ public class MainGameLoop
 			3, 1, 2
 		};
 		
-		DisplayManager.createDisplay();
+		float[] textCoords =
+		{
+			0, 0,
+			0, 1,
+			1, 1,
+			1, 0
+		};
 		
-		Loader loader = new Loader();
-		RawModel model = loader.loadToVAO(positions, indices);
-		Renderer renderer = new Renderer();
-		StaticShader shader = new StaticShader();
+		RawModel model = loader.loadToVAO(positions, textCoords, indices);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("redhead"));
+		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!Display.isCloseRequested())
 		{
 			renderer.prepare();
 			shader.start();
-			renderer.render(model);
+			renderer.render(texturedModel);
 			shader.stop();
 			DisplayManager.updateDisplay();
 		}
