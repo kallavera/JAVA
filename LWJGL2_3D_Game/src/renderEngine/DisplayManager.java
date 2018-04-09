@@ -1,20 +1,17 @@
-package com.thinmatrix.tutorial.core;
+package renderEngine;
 
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.opengl.*;
 
 public class DisplayManager
 {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
-	public static final int FPS_CAP = 60;
+	public static final int FPS_CAP = 120;
 	
-	public static final String TITLE = "LWJGL2 3D Tutorial";
+	public static final String TITLE = "LWJGL Tutorial";
 
 	public DisplayManager()
 	{
@@ -24,14 +21,13 @@ public class DisplayManager
 	public static void createDisplay()
 	{
 		ContextAttribs attribs = new ContextAttribs(3,2)
-				.withForwardCompatible(true)
-				.withProfileCore(true);
+		.withForwardCompatible(true)
+		.withProfileCore(false);
 		
 		try
 		{
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setVSyncEnabled(true);
 			Display.setTitle(TITLE);
 		}
 		catch (LWJGLException e)
@@ -45,12 +41,13 @@ public class DisplayManager
 	public static void updateDisplay()
 	{
 		Display.sync(FPS_CAP);
+		Display.setVSyncEnabled(true);
 		Display.update();
+		
 	}
 	
 	public static void closeDisplay()
 	{
 		Display.destroy();
 	}
-
 }
