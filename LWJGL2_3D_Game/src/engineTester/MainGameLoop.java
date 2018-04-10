@@ -9,6 +9,7 @@ import models.RawModel;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.OBJLoader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
 import textures.ModelTexture;
@@ -108,11 +109,12 @@ public class MainGameLoop
                 1,0
 		};
 		
-		RawModel model = loader.loadToVAO(positions, textCoords, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("starBall"));
+//		RawModel model = loader.loadToVAO(positions, textCoords, indices);
+		RawModel model = OBJLoader.loadModel("DragonBlender", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("DragonSkinGreen"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -2.5f), 0, 0, 0, 1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, -0.5f, -15f), 0, 0, 0, 1);
 		
 		Camera camera = new Camera();
 		
