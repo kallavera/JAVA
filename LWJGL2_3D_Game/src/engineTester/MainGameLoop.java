@@ -12,7 +12,8 @@ import textures.ModelTexture;
 
 public class MainGameLoop
 {
-	//https://www.youtube.com/watch?v=4w7lNF8dnYw
+	// https://www.youtube.com/watch?v=oc8Yl4ZruCA
+	// 3:11
 
 	public MainGameLoop()
 	{
