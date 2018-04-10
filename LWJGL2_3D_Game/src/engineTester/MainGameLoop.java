@@ -51,7 +51,7 @@ public class MainGameLoop
 		};
 		
 		RawModel model = loader.loadToVAO(positions, textCoords, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("redhead"));
+		ModelTexture texture = new ModelTexture(loader.loadTexture("marlhy"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!Display.isCloseRequested())
