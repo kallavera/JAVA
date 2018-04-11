@@ -117,6 +117,8 @@ public class MainGameLoop
 		
 		Entity entity = new Entity(texturedModel, new Vector3f(0, -0.75f, -5f), 0, 0, 0, 1);
 		Light light = new Light(new Vector3f(0, 0, -3.5f), new Vector3f(1, 1, 1));
+		texture.setShineDampler(10);
+		texture.setReflectivity(1);
 		
 		Camera camera = new Camera();
 		

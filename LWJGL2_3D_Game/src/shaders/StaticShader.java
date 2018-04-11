@@ -16,6 +16,8 @@ public class StaticShader extends ShaderProgram
 	private int uniform_location_viewMatrix;
 	private int uniform_location_lightPosition;
 	private int uniform_location_lightColor;
+	private int uniform_location_shineDampler;
+	private int uniform_location_reflectivity;
 
 	public StaticShader()
 	{
@@ -38,6 +40,8 @@ public class StaticShader extends ShaderProgram
 		uniform_location_viewMatrix = super.getUniformLocation("viewMatrix");
 		uniform_location_lightPosition = super.getUniformLocation("lightPosition");
 		uniform_location_lightColor = super.getUniformLocation("lightColor");
+		uniform_location_shineDampler = super.getUniformLocation("shineDampler");
+		uniform_location_reflectivity = super.getUniformLocation("reflectivity");
 	}
 	
 	public void loadTransformartionMatrix(Matrix4f matrix)
@@ -61,5 +65,11 @@ public class StaticShader extends ShaderProgram
 	{
 		super.loadVector(uniform_location_lightPosition, light.getPosition());
 		super.loadVector(uniform_location_lightColor, light.getColor());
+	}
+	
+	public void loadShineVariables(float shineDampler, float reflectivity)
+	{
+		super.loadFloat(uniform_location_shineDampler, shineDampler);
+		super.loadFloat(uniform_location_reflectivity, reflectivity);
 	}
 }
