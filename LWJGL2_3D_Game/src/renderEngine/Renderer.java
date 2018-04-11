@@ -5,6 +5,9 @@ import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
+import java.util.List;
+import java.util.Map;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
 
@@ -23,9 +26,13 @@ public class Renderer
 	public static final float FAR_PLANE = 1000f;
 	
 	private Matrix4f projectionMatrix;
+	private StaticShader shader;
 
 	public Renderer(StaticShader shader)
 	{
+		this.shader = shader;
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		createProjectionMatrix();
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
@@ -38,6 +45,11 @@ public class Renderer
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.6f, 0.0f, 0.0f, 1);
 //		glClearColor(0.0f, 0.0f, 0.0f, 1);
+	}
+	
+	public void render(Map<TexturedModel, List<Entity>> entities)
+	{
+		
 	}
 	
 	public void render(Entity entity, StaticShader shader)

@@ -32,10 +32,10 @@ public class Camera
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) { this.position.x += 0.05f; position.z += yaw;}
 		*/
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)) { this.position.z -= 0.05f; }
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)) { this.position.z += 0.05f; }
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)) { this.position.x -= 0.05f; }
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)) { this.position.x += 0.05f; }
+		if(Keyboard.isKeyDown(Keyboard.KEY_W)) { this.position.z -= 5f; }
+		if(Keyboard.isKeyDown(Keyboard.KEY_S)) { this.position.z += 5f; }
+		if(Keyboard.isKeyDown(Keyboard.KEY_A)) { this.position.x -= 5f; }
+		if(Keyboard.isKeyDown(Keyboard.KEY_D)) { this.position.x += 5f; }
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)) { this.pitch -= 1f; }
 		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) { this.pitch += 1f; }

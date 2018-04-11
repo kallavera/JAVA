@@ -1,5 +1,9 @@
 package engineTester;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -17,8 +21,8 @@ import textures.ModelTexture;
 
 public class MainGameLoop
 {
-	// https://www.youtube.com/watch?v=bcxX0R8nnDs&t=18s
-	// 1:36
+	// https://www.youtube.com/watch?v=X6KjDwA7mZg
+	// 12:50
 
 	public MainGameLoop()
 	{
@@ -111,26 +115,48 @@ public class MainGameLoop
 		};
 		
 //		RawModel model = loader.loadToVAO(positions, textCoords, indices);
-		RawModel model = OBJLoader.loadModel("DragonBlender", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("DragonSkinGreen"));
+		RawModel model = OBJLoader.loadModel("susane", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("Susan_Skin"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0, -0.75f, -5f), 0, 0, 0, 1);
-		Light light = new Light(new Vector3f(0, 0, -3.5f), new Vector3f(1, 1, 1));
-		texture.setShineDampler(10);
-		texture.setReflectivity(1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -5f), 0, 0, 0, 1);
+		Light light = new Light(new Vector3f(0, 0, -4), new Vector3f(1, 1, 1));
+		texture.setShineDampler(0);
+		texture.setReflectivity(0);
+		
+		RawModel geo = OBJLoader.loadModel("StarBall", loader);
+		ModelTexture material = new ModelTexture(loader.loadTexture("starBall"));
+		TexturedModel star = new TexturedModel(geo, material);
+		material.setShineDampler(10);
+		material.setReflectivity(2);
 		
 		Camera camera = new Camera();
 		
+		List<Entity> stars = new ArrayList<Entity>();
+		Random random = new Random();
+		
+		for(int i = 0; i < 50; i++)
+		{
+			float x = random.nextFloat() * 100 - 50;
+			float y = random.nextFloat() * 100 - 50;
+			float z = random.nextFloat() * -300;
+			
+			stars.add(new Entity(star, new Vector3f(x, y, z), random.nextFloat() * 180, random.nextFloat() * 180, 0, 1));
+		}
+		
 		while(!Display.isCloseRequested())
 		{
-			entity.increaseRotation(0, 1, 0);
+			entity.increaseRotation(0, 2, 0);
 			camera.move();
 			renderer.prepare();
 			shader.start();
 			shader.loadLight(light);
 			shader.loadViewMatrix(camera);
 			renderer.render(entity, shader);
+			for(Entity estrella:stars)
+			{
+				renderer.render(estrella, shader);
+			}
 			shader.stop();
 			DisplayManager.updateDisplay();
 		}
