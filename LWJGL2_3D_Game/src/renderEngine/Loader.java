@@ -26,12 +26,13 @@ public class Loader
 		
 	}
 	
-	public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices)
+	public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices)
 	{
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
 		storeDataInAttributeList(ShaderProgram.ATT_POSITIONS, 3, positions);
 		storeDataInAttributeList(ShaderProgram.ATT_TEX_COORDS, 2, textureCoords);
+		storeDataInAttributeList(ShaderProgram.ATT_NORMALS, 3, normals);
 		unbindVAO();
 		
 		return new RawModel(vaoID, indices.length);

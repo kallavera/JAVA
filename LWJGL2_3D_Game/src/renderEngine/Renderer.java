@@ -35,7 +35,8 @@ public class Renderer
 	{
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0f, 0.0f, 0.0f, 1);
+		glClearColor(0.6f, 0.0f, 0.0f, 1);
+//		glClearColor(0.0f, 0.0f, 0.0f, 1);
 	}
 	
 	public void render(Entity entity, StaticShader shader)
@@ -45,6 +46,7 @@ public class Renderer
 		glBindVertexArray(model.getVaoID());
 		glEnableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		glEnableVertexAttribArray(ShaderProgram.ATT_TEX_COORDS);
+		glEnableVertexAttribArray(ShaderProgram.ATT_NORMALS);
 		
 		Matrix4f transformationMatrix = Maths.createTransformationMatric(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		shader.loadTransformartionMatrix(transformationMatrix);
@@ -55,6 +57,7 @@ public class Renderer
 		
 		glDisableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		glDisableVertexAttribArray(ShaderProgram.ATT_TEX_COORDS);
+		glDisableVertexAttribArray(ShaderProgram.ATT_NORMALS);
 		glBindVertexArray(0);
 	}
 	
