@@ -14,6 +14,7 @@ import models.RawModel;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
@@ -34,8 +35,7 @@ public class MainGameLoop
 		DisplayManager.createDisplay();
 		
 		Loader loader = new Loader();
-		StaticShader shader = new StaticShader();
-		Renderer renderer = new Renderer(shader);
+
 		
 		float[] positions =
 		{
@@ -115,27 +115,27 @@ public class MainGameLoop
 		};
 		
 //		RawModel model = loader.loadToVAO(positions, textCoords, indices);
-		RawModel model = OBJLoader.loadModel("susane", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("Susan_Skin"));
+		RawModel model = OBJLoader.loadModel("DragonBlender", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("DragonSkinGreen"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -5f), 0, 0, 0, 1);
-		Light light = new Light(new Vector3f(0, 0, -4), new Vector3f(1, 1, 1));
-		texture.setShineDampler(0);
-		texture.setReflectivity(0);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, -0.75f, -5f), 0, 0, 0, 1);
+		Light light = new Light(new Vector3f(0, 0, -2), new Vector3f(1, 1, 1));
+		texture.setShineDampler(10);
+		texture.setReflectivity(20);
 		
-		RawModel geo = OBJLoader.loadModel("StarBall", loader);
-		ModelTexture material = new ModelTexture(loader.loadTexture("starBall"));
+		RawModel geo = OBJLoader.loadModel("susane", loader);
+		ModelTexture material = new ModelTexture(loader.loadTexture("Susan_Skin"));
 		TexturedModel star = new TexturedModel(geo, material);
 		material.setShineDampler(10);
-		material.setReflectivity(2);
+		material.setReflectivity(20);
 		
 		Camera camera = new Camera();
 		
 		List<Entity> stars = new ArrayList<Entity>();
 		Random random = new Random();
 		
-		for(int i = 0; i < 50; i++)
+		for(int i = 0; i < 100; i++)
 		{
 			float x = random.nextFloat() * 100 - 50;
 			float y = random.nextFloat() * 100 - 50;
@@ -144,24 +144,21 @@ public class MainGameLoop
 			stars.add(new Entity(star, new Vector3f(x, y, z), random.nextFloat() * 180, random.nextFloat() * 180, 0, 1));
 		}
 		
+		MasterRenderer renderer = new MasterRenderer();
+		
 		while(!Display.isCloseRequested())
 		{
 			entity.increaseRotation(0, 2, 0);
 			camera.move();
-			renderer.prepare();
-			shader.start();
-			shader.loadLight(light);
-			shader.loadViewMatrix(camera);
-			renderer.render(entity, shader);
 			for(Entity estrella:stars)
 			{
-				renderer.render(estrella, shader);
+				renderer.processEntity(estrella);
 			}
-			shader.stop();
+			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 		
-		shader.cleanUp();
+		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 	}

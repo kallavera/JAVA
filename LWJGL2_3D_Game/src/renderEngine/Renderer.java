@@ -49,32 +49,47 @@ public class Renderer
 	
 	public void render(Map<TexturedModel, List<Entity>> entities)
 	{
-		
+		for(TexturedModel model:entities.keySet())
+		{
+			prepareTexturedModel(model);
+			List<Entity> batch = entities.get(model);
+			for(Entity entity:batch)
+			{
+				prepareInstance(entity);
+				glDrawElements(GL_TRIANGLES, model.getRawModel().getVertexCount(), GL_UNSIGNED_INT, 0);
+			}
+			unbindTexturedModel();
+		}
 	}
 	
-	public void render(Entity entity, StaticShader shader)
+	private void prepareTexturedModel(TexturedModel texturedModel)
 	{
-		TexturedModel texturedModel = entity.getModel();
 		RawModel model = texturedModel.getRawModel();
 		glBindVertexArray(model.getVaoID());
 		glEnableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		glEnableVertexAttribArray(ShaderProgram.ATT_TEX_COORDS);
 		glEnableVertexAttribArray(ShaderProgram.ATT_NORMALS);
 		
-		Matrix4f transformationMatrix = Maths.createTransformationMatric(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
-		shader.loadTransformartionMatrix(transformationMatrix);
-		
 		ModelTexture texture = texturedModel.getTexture();
 		shader.loadShineVariables(texture.getShineDampler(), texture.getReflectivity());
 		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texturedModel.getTexture().getID());
-		glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-		
+	}
+	
+	private void unbindTexturedModel()
+	{
 		glDisableVertexAttribArray(ShaderProgram.ATT_POSITIONS);
 		glDisableVertexAttribArray(ShaderProgram.ATT_TEX_COORDS);
 		glDisableVertexAttribArray(ShaderProgram.ATT_NORMALS);
 		glBindVertexArray(0);
+	}
+	
+	private void prepareInstance(Entity entity)
+	{
+		Matrix4f transformationMatrix = Maths.createTransformationMatric(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
+		shader.loadTransformartionMatrix(transformationMatrix);
+		
 	}
 	
 	private void createProjectionMatrix()
