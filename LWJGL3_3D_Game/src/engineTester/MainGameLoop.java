@@ -9,10 +9,11 @@ import rendererEngine.Display;
 import rendererEngine.Loader;
 import rendererEngine.RawModel;
 import rendererEngine.Renderer;
+import shaders.StaticShader;
 
 public class MainGameLoop
 {
-	public static final int WIDTH = 600;
+	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	public static final String TITLE = "LWJGL 3D Tutorial";
 	
@@ -44,6 +45,7 @@ public class MainGameLoop
 		};
 		
 		Loader loader = new Loader();
+		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer();
 		
 		RawModel model = loader.loadToVao(vertices, indices);
@@ -54,11 +56,14 @@ public class MainGameLoop
 			
 			renderer.prepare();
 			
+			shader.start();
 			renderer.render(model);
+			shader.stop();
 			
 			Display.updateDisplay();
 		}
 		
+		shader.cleanUp();
 		loader.cleanUp();
 		Display.closeDisplay();
 	}

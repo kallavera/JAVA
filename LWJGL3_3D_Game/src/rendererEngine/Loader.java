@@ -11,9 +11,11 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import shaders.ShaderProgram;
+
 public class Loader
 {
-	public static final int ATT_INDEX_POSITIONS = 0;
+	
 	
 	private List<Integer> vaos = new ArrayList<Integer>();
 	private List<Integer> vbos = new ArrayList<Integer>();
@@ -22,7 +24,7 @@ public class Loader
 	{
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
-		storeDataInAttributeList(ATT_INDEX_POSITIONS, 3, positions);
+		storeDataInAttributeList(ShaderProgram.ATT_INDEX_POSITIONS, 3, positions);
 		unbindVAO();
 		
 		return new RawModel(vaoID, indices.length);
