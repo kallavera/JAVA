@@ -1,7 +1,6 @@
 package engineTester;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.opengl.GL;
 
@@ -13,6 +12,9 @@ import shaders.StaticShader;
 
 public class MainGameLoop
 {
+	//	Carla Lerin altos pechos
+	//	https://www.youtube.com/watch?v=SPt-aogu72A&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=6
+	
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	public static final String TITLE = "LWJGL 3D Tutorial";

@@ -14,16 +14,16 @@ public class Display
 	
 	public Display()
 	{
-		this.width = 480;
-		this.height = 320;
-		this.title = "Game";
+		Display.width = 480;
+		Display.height = 320;
+		Display.title = "Game";
 	}
 	
 	public Display(int width, int height, String title)
 	{
-		this.width = width;
-		this.height = height;
-		this.title = title;
+		Display.width = width;
+		Display.height = height;
+		Display.title = title;
 	}
 	
 	public static void createDisplay()
