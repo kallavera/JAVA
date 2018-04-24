@@ -18,7 +18,7 @@ public class Renderer
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(Loader.ATT_INDEX_POSITIONS);
 		
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		
 		GL20.glDisableVertexAttribArray(Loader.ATT_INDEX_POSITIONS);
 		GL30.glBindVertexArray(0);

@@ -12,7 +12,7 @@ import rendererEngine.Renderer;
 
 public class MainGameLoop
 {
-	public static final int WIDTH = 800;
+	public static final int WIDTH = 600;
 	public static final int HEIGHT = 600;
 	public static final String TITLE = "LWJGL 3D Tutorial";
 	
@@ -34,16 +34,19 @@ public class MainGameLoop
 				-0.5f,  0.5f, 0f,
 				-0.5f, -0.5f, 0f,
 				 0.5f, -0.5f, 0f,
-				 
-				 0.5f, -0.5f, 0f,
-				 0.5f,  0.5f, 0f,
-				-0.5f,  0.5f, 0f
+				 0.5f,  0.5f, 0f
+		};
+		
+		int[] indices =
+		{
+				0, 1, 3,
+				3, 1, 2
 		};
 		
 		Loader loader = new Loader();
 		Renderer renderer = new Renderer();
 		
-		RawModel model = loader.loadToVao(vertices);
+		RawModel model = loader.loadToVao(vertices, indices);
 		
 		while(!display.shouldClose())
 		{
