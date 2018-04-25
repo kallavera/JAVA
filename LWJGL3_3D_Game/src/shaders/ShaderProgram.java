@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL20;
 public abstract class ShaderProgram
 {
 	public static final int ATT_INDEX_POSITIONS = 0;
+	public static final int ATT_INDEX_TEXTURE_COORDS = 1;
 	
 	private int programID;
 	private int vertexShaderID;

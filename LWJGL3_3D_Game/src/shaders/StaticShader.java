@@ -12,5 +12,6 @@ public class StaticShader extends ShaderProgram
     @Override
     protected void bindAttributes() {
         super.bindAttribute(ShaderProgram.ATT_INDEX_POSITIONS, "position");
+        super.bindAttribute(ShaderProgram.ATT_INDEX_TEXTURE_COORDS, "textureCoords");
     }
 }

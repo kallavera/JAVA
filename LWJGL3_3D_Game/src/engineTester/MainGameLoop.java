@@ -1,13 +1,17 @@
 package engineTester;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glEnable;
 
 import org.lwjgl.opengl.GL;
 
 import rendererEngine.Display;
 import rendererEngine.Loader;
-import rendererEngine.RawModel;
+import models.RawModel;
+import models.TexturedModel;
 import rendererEngine.Renderer;
+import textures.Texture;
 import shaders.StaticShader;
 
 public class MainGameLoop
@@ -46,11 +50,21 @@ public class MainGameLoop
 				3, 1, 2
 		};
 		
+		float[] textCoords = 
+		{
+				0,0,
+				0,1,
+				1,1,
+				1,0
+		};
+		
 		Loader loader = new Loader();
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer();
 		
-		RawModel model = loader.loadToVao(vertices, indices);
+		RawModel model = loader.loadToVao(vertices, textCoords, indices);
+		Texture texture = new Texture(loader.loadTexture("img_01"));
+		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!display.shouldClose())
 		{
@@ -58,8 +72,10 @@ public class MainGameLoop
 			
 			renderer.prepare();
 			
+			glEnable(GL_TEXTURE_2D);
+			
 			shader.start();
-			renderer.render(model);
+			renderer.render(texturedModel);
 			shader.stop();
 			
 			Display.updateDisplay();
