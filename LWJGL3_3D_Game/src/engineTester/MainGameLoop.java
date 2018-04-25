@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 
 import org.lwjgl.opengl.GL;
 
+import inputs.Input;
 import rendererEngine.Display;
 import rendererEngine.Loader;
 import models.RawModel;
@@ -24,6 +25,8 @@ public class MainGameLoop
 	public static final String TITLE = "LWJGL 3D Tutorial";
 	
 	public static Display display = new Display(WIDTH, HEIGHT, TITLE);
+	
+	private static Input input;
 	
 	public static void main(String[] args)
 	{
@@ -62,6 +65,8 @@ public class MainGameLoop
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer();
 		
+		input = new Input();
+		
 		RawModel model = loader.loadToVao(vertices, textCoords, indices);
 		Texture texture = new Texture(loader.loadTexture("img_01"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
@@ -74,6 +79,10 @@ public class MainGameLoop
 			
 			glEnable(GL_TEXTURE_2D);
 			
+//			input.update();
+			
+			update();
+			
 			shader.start();
 			renderer.render(texturedModel);
 			shader.stop();
@@ -84,5 +93,14 @@ public class MainGameLoop
 		shader.cleanUp();
 		loader.cleanUp();
 		Display.closeDisplay();
+	}
+	
+	private static void update()
+	{
+		input.update();
+		
+		if(input.isFire()) { System.out.println("PUM!!!"); }
+		
+		if(input.isClose()) { Display.setShouldClose(); }
 	}
 }

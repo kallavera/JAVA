@@ -66,27 +66,17 @@ public class Display
 		glfwTerminate();
 	}
 	
-	public boolean shouldClose()
+	public static boolean shouldClose()
 	{
 		return glfwWindowShouldClose(window) ? true : false;
 	}
 	
-	public void goFullScreen()
+	public static void setShouldClose()
 	{
-		destroyWindow();
-		setFullScreen(true);
-		createDisplay();
+		glfwSetWindowShouldClose(window, true);
 	}
 	
-	public void goWindowed()
-	{
-		destroyWindow();
-		setFullScreen(false);
-		setSize(width, height);
-		createDisplay();
-	}
-	
-	public void destroyWindow()
+	public static void destroyWindow()
 	{
 		glfwDestroyWindow(window);
 	}
@@ -97,27 +87,27 @@ public class Display
 		Display.height = height;
 	}
 	
-	public void setFullScreen(boolean fs)
+	public static void setFullScreen(boolean fs)
 	{
 		fullScreen = fs;
 	}
 	
-	public int getWidth()
+	public static int getWidth()
 	{
 		return width;
 	}
 	
-	public int getHeight()
+	public static int getHeight()
 	{
 		return height;
 	}
 	
-	public long getWindow()
+	public static long getWindow()
 	{
 		return window;
 	}
 	
-	public boolean getFullScreen()
+	public static boolean getFullScreen()
 	{
 		return fullScreen;
 	}
