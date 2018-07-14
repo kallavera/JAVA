@@ -1,129 +1,77 @@
 package renderEngine;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-
-import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
-import org.newdawn.slick.opengl.*;
-
-import models.RawModel;
-import shaders.ShaderProgram;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 public class Loader
 {
-	private List<Integer> vaos = new ArrayList<Integer>();
-	private List<Integer> vbos = new ArrayList<Integer>();
-	private List<Integer> textures = new ArrayList<Integer>();
-
-	public Loader()
-	{
-		
-	}
+	public static final int ATTRIB_INDEX_POSITION = 0;
 	
-	public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices)
+	private List<Integer>vaos = new ArrayList<Integer>();
+	private List<Integer>vbos = new ArrayList<Integer>();
+	
+	public Geometry loadToVAO(float[] positions)
 	{
 		int vaoID = createVAO();
-		bindIndicesBuffer(indices);
-		storeDataInAttributeList(ShaderProgram.ATT_POSITIONS, 3, positions);
-		storeDataInAttributeList(ShaderProgram.ATT_TEX_COORDS, 2, textureCoords);
-		storeDataInAttributeList(ShaderProgram.ATT_NORMALS, 3, normals);
+		storeDataInAttributeList(ATTRIB_INDEX_POSITION, positions);
 		unbindVAO();
-		
-		return new RawModel(vaoID, indices.length);
+		return new Geometry(vaoID, positions.length / 3);
 	}
 	
 	private int createVAO()
 	{
-		int vaoID = glGenVertexArrays();
+		int vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
-		glBindVertexArray(vaoID);
+		GL30.glBindVertexArray(vaoID);
+		
 		return vaoID;
 	}
 	
-	private void storeDataInAttributeList(int attributeNumber, int size, float[] data)
+	private void storeDataInAttributeList(int attributeIndex, float[] data)
 	{
-		int vboID = glGenBuffers();
+		int vboID = GL15.glGenBuffers();
 		vbos.add(vboID);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		
 		FloatBuffer buffer = storeDataInFloatBuffer(data);
-		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_FLOAT, false, 0, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+		GL20.glVertexAttribPointer(attributeIndex, 3, GL11.GL_FLOAT, false, 0, 0);
+		
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 	
 	private void unbindVAO()
 	{
-		glBindVertexArray(0);
-	}
-	
-	private void bindIndicesBuffer(int[] indices)
-	{
-		int vboID = glGenBuffers();
-		vbos.add(vboID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
-		IntBuffer buffer = storeDataInIntBuffer(indices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+		GL30.glBindVertexArray(0);
 	}
 	
 	private FloatBuffer storeDataInFloatBuffer(float[] data)
 	{
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+		FloatBuffer buffer = new BufferUtils().createFloatBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
-	}
-	
-	private IntBuffer storeDataInIntBuffer(int[] data)
-	{
-		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
-		buffer.put(data);
-		buffer.flip();
-		return buffer;
-	}
-	
-	public int loadTexture(String fileName)
-	{
-		Texture texture = null;
-		try
-		{
-			texture = TextureLoader.getTexture("PNG", new FileInputStream("res/IMAGES/" + fileName + ".png"));
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		int textureID = texture.getTextureID();
-		textures.add(textureID);
-		
-		return textureID;
 	}
 	
 	public void cleanUp()
 	{
 		for(int vao:vaos)
 		{
-			glDeleteVertexArrays(vao);
+			GL30.glDeleteVertexArrays(vao);
 		}
 		
 		for(int vbo:vbos)
 		{
-			glDeleteBuffers(vbo);
-		}
-		
-		for(int texture:textures)
-		{
-			glDeleteTextures(texture);
+			GL15.glDeleteBuffers(vbo);
 		}
 	}
 }

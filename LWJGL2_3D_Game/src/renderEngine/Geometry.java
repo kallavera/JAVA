@@ -1,11 +1,11 @@
-package models;
+package renderEngine;
 
-public class RawModel
+public class Geometry
 {
 	private int vaoID;
 	private int vertexCount;
-
-	public RawModel(int vaoID, int vertexCount)
+	
+	public Geometry(int vaoID, int vertexCount)
 	{
 		this.vaoID = vaoID;
 		this.vertexCount = vertexCount;
