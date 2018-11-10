@@ -1,6 +1,9 @@
 package com.arpegio.engine.core;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+
+import org.lwjgl.opengl.GL;
 
 import org.lwjgl.glfw.GLFWVidMode;
 
@@ -20,7 +23,7 @@ public class Engine
 	
 	/**
 	 * void init()
-	 * Inicializa GLFW y crea contexto para OpenGL
+	 * Inicializa GLFW
 	 */
 	public void init()
 	{
@@ -55,12 +58,46 @@ public class Engine
 		glfwSetWindowPos(window, (vm.width() - width) / 2, (vm.height() - height) / 2);
 		
 		glfwShowWindow(window);
+		glfwMakeContextCurrent(window);
+		GL.createCapabilities();
+		
+		glClearColor(0.0f, 0.0f, 0.0f, 1f);
 		
 		while(!glfwWindowShouldClose(window))
 		{
-			glfwPollEvents();
+			update();
+			
+			render();
 		}
 		
 		glfwTerminate();
+	}
+	
+	private void update()
+	{
+		glfwPollEvents();
+	}
+	
+	private void render()
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glBegin(GL_QUADS);
+		{
+			glColor4f(1,  0 , 0,  1);
+			glVertex2f(-0.5f,  0.5f);
+			
+			glColor4f(0,  1 , 0,  1);
+			glVertex2f( 0.5f,  0.5f);
+			
+			glColor4f(0,  0 , 1,  1);
+			glVertex2f( 0.5f, -0.5f);
+			
+			glColor4f(1,  1 , 0,  1);
+			glVertex2f(-0.5f, -0.5f);
+		}
+		glEnd();
+		
+		glfwSwapBuffers(window);
 	}
 }
